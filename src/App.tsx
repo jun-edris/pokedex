@@ -12,7 +12,7 @@ import PokemonCard from "./components/PokemonCard";
 const App = (): JSX.Element => {
   const [searchPokemon, setSearchPokemon] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string>("all");
-  const [limit, setLimit] = useState<number>(20);
+  const [limit, setLimit] = useState<number>(8);
 
   // const handleSearch = (e: any) => {
   //   setSearchPokemon(e.target.value);
@@ -84,7 +84,9 @@ const App = (): JSX.Element => {
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
                   {pokemons?.map((pokemon) => (
-                    <PokemonCard indexKey={pokemon.id} pokemon={pokemon} />
+                    <div key={pokemon.id}>
+                      <PokemonCard pokemon={pokemon} />
+                    </div>
                   ))}
                 </div>
                 {isFetching && <BouncingBall />}
@@ -93,7 +95,7 @@ const App = (): JSX.Element => {
                     <button
                       className="px-10 py-3 bg-secondary rounded-md hover:bg-tertiary hover:text-white transition duration-300 ease-in-out"
                       onClick={() => {
-                        setLimit((prevLimit) => prevLimit + 20);
+                        setLimit((prevLimit) => prevLimit + 8);
                       }}
                     >
                       Show More
