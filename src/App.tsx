@@ -38,7 +38,7 @@ const App = (): JSX.Element => {
 
   return (
     <>
-      <div className="bg-primary h-full pb-10">
+      <div className="bg-primary h-full pb-10 min-h-screen">
         <div className="container mx-auto">
           <div className="flex justify-between items-center border-b border-zinc-100 py-2">
             <img src={logo} alt="Pokemon Logo" height="100%" width="200" />
