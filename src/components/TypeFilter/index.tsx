@@ -60,28 +60,34 @@ const TypeFilter: React.FC<Props> = ({ selectedType, onTypeChange }) => {
       {isOpen && (
         <ul
           ref={dropdownRef}
-          className="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg top-12 left-0 shadow-lg"
+          className="absolute z-50 w-full mt-1 bg-white rounded-md top-12 left-0 shadow-lg"
         >
-          <li
-            className="cursor-pointer py-2 px-3 text-sm hover:bg-quaternary first:hover:rounded-t-md last:hover:rounded-b-md border-b last:border-b-0 hover:text-white flex items-center capitalize"
-            onClick={() => handleTypeClick("all")}
-          >
-            all
-          </li>
-          {pokemonTypes.map((type) => (
-            <li
-              key={type.name}
-              className="cursor-pointer py-2 px-3 text-sm hover:bg-quaternary first:hover:rounded-t-md last:hover:rounded-b-md border-b last:border-b-0 hover:text-white flex items-center capitalize"
-              onClick={() => handleTypeClick(type.name)}
-            >
-              {/* <img
+          {isLoading ? (
+            <li>Loading...</li>
+          ) : (
+            <>
+              <li
+                className="cursor-pointer py-2 px-3 text-sm hover:bg-quaternary first:hover:rounded-t-md last:hover:rounded-b-md border-b last:border-b-0 hover:text-white flex items-center capitalize"
+                onClick={() => handleTypeClick("all")}
+              >
+                all
+              </li>
+              {pokemonTypes.map((type) => (
+                <li
+                  key={type.name}
+                  className="cursor-pointer py-2 px-3 text-sm hover:bg-quaternary first:hover:rounded-t-md last:hover:rounded-b-md border-b last:border-b-0 hover:text-white flex items-center capitalize"
+                  onClick={() => handleTypeClick(type.name)}
+                >
+                  {/* <img
                 src={`https://img.pokemondb.net/sprites/bank/normal/${option.name}.png`}
                 alt={type.name}
                 className="h-6 w-6 mr-2"
               /> */}
-              {type.name}
-            </li>
-          ))}
+                  {type.name}
+                </li>
+              ))}
+            </>
+          )}
         </ul>
       )}
     </div>
