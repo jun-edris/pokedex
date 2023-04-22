@@ -1,12 +1,13 @@
 import { useState } from "react";
-import logo from "./assets/Pokemon-Logo.png";
+import logo from "/Pokemon-Logo.png";
+import classNames from "classnames";
 import { FiSearch, FiX } from "react-icons/fi";
 import TypeFilter from "./components/TypeFilter";
 import { useQuery } from "react-query";
 import { Pokemon } from "./types";
 import { pokemonAPI } from "./api/pokemon";
-import classNames from "classnames";
 import { Analytics } from "@vercel/analytics/react";
+import BouncingBall from "./components/BouncingBall";
 
 const App = (): JSX.Element => {
   const [searchPokemon, setSearchPokemon] = useState<string>("");
@@ -74,9 +75,9 @@ const App = (): JSX.Element => {
               </div>
             </div>
           </div>
-          <div>
+          <div className="w-full min-h-full">
             {isLoading ? (
-              <p>Loading...</p>
+              <BouncingBall />
             ) : (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
@@ -131,11 +132,7 @@ const App = (): JSX.Element => {
                     </div>
                   ))}
                 </div>
-                {isFetching && (
-                  <p className="text-lg font-bold mt-8 text-white">
-                    Fetching more data...
-                  </p>
-                )}
+                {isFetching && <BouncingBall />}
                 {pokemons && pokemons.length >= limit && (
                   <div className="w-full flex justify-center mt-10">
                     <button
