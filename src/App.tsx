@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { Pokemon } from "./types";
 import { pokemonAPI } from "./api/pokemon";
 import classNames from "classnames";
+import { Analytics } from "@vercel/analytics/react";
 
 const App = (): JSX.Element => {
   const [searchPokemon, setSearchPokemon] = useState<string>("");
@@ -152,6 +153,7 @@ const App = (): JSX.Element => {
           </div>
         </div>
       </div>
+      <Analytics />
     </>
   );
 };
