@@ -12,10 +12,10 @@ const App = (): JSX.Element => {
   const [selectedType, setSelectedType] = useState<string>("all");
   const [limit, setLimit] = useState<number>(20);
 
-  const handleSearch = (e: any) => {
-    setSearchPokemon(e.target.value);
-    e.preventDefault();
-  };
+  // const handleSearch = (e: any) => {
+  //   setSearchPokemon(e.target.value);
+  //   e.preventDefault();
+  // };
 
   const handleTypeChange = (type: string) => {
     setSelectedType(type);
