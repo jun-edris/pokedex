@@ -14,7 +14,7 @@ export default {
         sans: ["Montserrat", "sans-serif"],
         prgh: ["Poppins", "sans-serif"],
         spans: ["Roboto", "sans-serif"],
-        heading: ["Press Start 2P", "sans-serif"],
+        heading: ['"Press Start 2P"', "cursive"],
       },
     },
   },

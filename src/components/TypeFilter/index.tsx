@@ -48,7 +48,7 @@ const TypeFilter: React.FC<Props> = ({ selectedType, onTypeChange }) => {
         type="text"
         value={selectedType}
         readOnly
-        className="bg-transparent outline-none text-white text-sm capitalize"
+        className="bg-transparent outline-none text-white text-sm capitalize w-full"
         onClick={handleInputClick}
         placeholder={selectedType ? "" : "Select a type"}
       />

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import logo from "/Pokemon-Logo.png";
-import classNames from "classnames";
 import { FiSearch, FiX } from "react-icons/fi";
 import TypeFilter from "./components/TypeFilter";
 import { useQuery } from "react-query";
@@ -8,6 +7,7 @@ import { Pokemon } from "./types";
 import { pokemonAPI } from "./api/pokemon";
 import { Analytics } from "@vercel/analytics/react";
 import BouncingBall from "./components/BouncingBall";
+import PokemonCard from "./components/PokemonCard";
 
 const App = (): JSX.Element => {
   const [searchPokemon, setSearchPokemon] = useState<string>("");
@@ -40,11 +40,13 @@ const App = (): JSX.Element => {
   return (
     <>
       <div className="bg-primary h-full pb-10 min-h-screen">
-        <div className="container mx-auto">
-          <div className="flex justify-between items-center border-b border-zinc-100 py-2">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col lg:flex-row md:justify-between items-center border-b border-zinc-100 pt-2 pb-6 lg:pb-2">
             <img src={logo} alt="Pokemon Logo" height="100%" width="200" />
-            <div className="flex items-center gap-3">
-              <span className="text-white font-sans">Filters</span>
+            <div className="flex flex-col md:flex-row gap-3">
+              <span className="text-white font-sans h-full block my-auto">
+                Filters
+              </span>
               <div className="border border-solid rounded-full px-5 py-2 flex items-center relative">
                 <TypeFilter
                   selectedType={selectedType}
@@ -62,7 +64,7 @@ const App = (): JSX.Element => {
                       setSearchPokemon(e.target.value);
                     }}
                     placeholder="Enter Name of Pokemon"
-                    className="bg-transparent outline-none text-white text-sm py-1 transition duration-300 ease-in-out"
+                    className="bg-transparent outline-none text-white text-sm py-1 transition duration-300 ease-in-out lg:w-[250px]"
                   />
                   {searchPokemon && (
                     <FiX
@@ -82,54 +84,7 @@ const App = (): JSX.Element => {
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
                   {pokemons?.map((pokemon) => (
-                    <div
-                      key={pokemon.id}
-                      className="rounded-md shadow-md overflow-hidden hover:shadow-lg transition duration-300 ease-in-out"
-                    >
-                      <div className="bg-slate-300 p-4">
-                        <img
-                          src={pokemon.image}
-                          alt={pokemon.name}
-                          className="mx-auto w-32 h-32"
-                        />
-                      </div>
-                      <div className="p-4 bg-quaternary">
-                        <h2 className="text-lg font-heading capitalize text-white">
-                          {pokemon.name}
-                        </h2>
-                        {pokemon.types.map((type) => (
-                          <span
-                            key={type}
-                            className={classNames(
-                              "text-xs px-2 py-1 rounded-md mr-2 bg-gray-200",
-                              {
-                                "bg-lime-400": type === "grass",
-                                "bg-violet-500 text-white": type === "poison",
-                                "bg-red-500 text-white": type === "fire",
-                                "bg-sky-500 text-white": type === "water",
-                                "bg-green-600 text-white": type === "bug",
-                                "bg-yellow-600 text-white": type === "flying",
-                                "bg-slate-400 text-white": type === "normal",
-                                "bg-indigo-500 text-white": type === "psychic",
-                                "bg-pink-500 text-white": type === "fairy",
-                                "bg-amber-900 text-white": type === "ground",
-                                "bg-yellow-950 text-white": type === "rock",
-                                "bg-yellow-300": type === "electric",
-                                "bg-blue-200": type === "ice",
-                                "bg-orange-400 text-white": type === "fighting",
-                                "bg-red-800 text-white": type === "dragon",
-                                "bg-gray-900 text-white": type === "dark",
-                                "bg-indigo-800 text-white": type === "ghost",
-                                "bg-gray-200": type === "ghost",
-                              }
-                            )}
-                            onClick={() => setSelectedType(type)}
-                          >
-                            {type}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                    <PokemonCard pokemon={pokemon} />
                   ))}
                 </div>
                 {isFetching && <BouncingBall />}
