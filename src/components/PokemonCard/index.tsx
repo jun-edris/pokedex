@@ -3,9 +3,10 @@ import { Pokemon } from "../../types";
 
 type Props = {
   pokemon: Pokemon;
+  indexKey: number;
 };
 
-const PokemonCard = ({ pokemon }: Props) => {
+const PokemonCard = ({ pokemon, indexKey }: Props) => {
   const cardStyle = {
     backgroundColor: "rgba(255, 255, 255, 0.7)",
     backgroundSize: "cover",
@@ -16,7 +17,7 @@ const PokemonCard = ({ pokemon }: Props) => {
 
   return (
     <div
-      key={pokemon.id}
+      key={indexKey}
       className="rounded-md shadow-md overflow-hidden hover:shadow-lg transition duration-300 ease-in-out hover:scale-105"
     >
       <div className="p-4 relative">
