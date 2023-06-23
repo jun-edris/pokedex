@@ -12,13 +12,7 @@ import PokemonCard from "./components/PokemonCard";
 const App = (): JSX.Element => {
   const [searchPokemon, setSearchPokemon] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string>("all");
-  // const [filteredPokemon, setFilteredPokemon] = useState<string>("");
   const [limit, setLimit] = useState<number>(18);
-
-  // const handleSearch = (e: any) => {
-  //   setSearchPokemon(e.target.value);
-  //   e.preventDefault();
-  // };
 
   const handleTypeChange = (type: string) => {
     setSelectedType(type);
@@ -55,7 +49,6 @@ const App = (): JSX.Element => {
     { enabled: !!selectedType }
   );
 
-  console.log(filteredByType);
   return (
     <>
       <div className="bg-primary h-full pb-10 min-h-screen">
@@ -95,23 +88,32 @@ const App = (): JSX.Element => {
             </div>
           </div>
           <div className="w-full min-h-full">
-            {(initialLoading || filteredLoading) && <BouncingBall />}
-            {(!initialLoading || !filteredLoading) && (
+            {(initialLoading || filteredLoading || filteredTypeLoading) && (
+              <BouncingBall />
+            )}
+            {(!initialLoading || !filteredLoading || !filteredTypeLoading) && (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 mt-4">
                   {searchPokemon
                     ? filteredData?.map((pokemon) => (
-                        <div key={pokemon.name}>
+                        <div key={pokemon.id}>
+                          <PokemonCard pokemon={pokemon} />
+                        </div>
+                      ))
+                    : selectedType !== "all"
+                    ? filteredByType?.map((pokemon) => (
+                        <div key={pokemon.id}>
                           <PokemonCard pokemon={pokemon} />
                         </div>
                       ))
                     : initialData?.map((pokemon) => (
-                        <div key={pokemon.name}>
+                        <div key={pokemon.id}>
                           <PokemonCard pokemon={pokemon} />
                         </div>
                       ))}
                 </div>
                 {!searchPokemon &&
+                  selectedType === "all" &&
                   initialData &&
                   initialData.length >= limit && (
                     <div className="w-full flex justify-center mt-10">

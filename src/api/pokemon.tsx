@@ -1,9 +1,10 @@
 import axios from "axios";
-import { Pokemon, PokemonTypeApiResponse } from "../types";
+import { Pokemon } from "../types";
 import ball from "/ball.png";
 
 interface ApiResponse {
   results: { name: string }[];
+  pokemon: Pokemon[];
 }
 
 const pokemonAPI = {
@@ -97,31 +98,28 @@ const pokemonAPI = {
 
     const response = await axios.get<ApiResponse>(url);
 
-    console.log(response.data);
+    const filteredResponse =
+      selectedType !== "all" ? response.data.pokemon : response.data.results;
 
     const pokemonList = await Promise.all(
-      response.data.results.map(async (result: any) => {
+      filteredResponse.map(async (result: any) => {
+        const filteredResult =
+          selectedType !== "all" ? result.pokemon.name : result.name;
+
         const pokemonResponse = await axios.get<{
           id: number;
           types: { type: { name: string } }[];
-        }>(`https://pokeapi.co/api/v2/pokemon/${result.name}`);
+        }>(`https://pokeapi.co/api/v2/pokemon/${filteredResult}`);
 
         let imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonResponse.data.id}.png`;
-        let imgErr = false;
 
-        try {
-          await axios.get(imageUrl);
-        } catch (error) {
-          // if image is not found, use the ball image
-          imgErr = true;
-        }
+        const pokeImg = imageUrl ? imageUrl : ball;
 
         return {
           id: pokemonResponse.data.id,
-          name: result.name,
-          image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonResponse.data.id}.png`,
+          name: filteredResult,
+          image: pokeImg,
           types: pokemonResponse.data.types.map((type) => type.type.name),
-          imageError: imgErr,
         };
       })
     );

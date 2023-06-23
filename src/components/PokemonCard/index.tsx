@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import { Pokemon } from "../../types";
-import ball from "/ball.png";
 
 type Props = {
   pokemon: Pokemon;
@@ -21,17 +20,16 @@ const PokemonCard = ({ pokemon }: Props) => {
         <div
           className="absolute left-0 top-0 w-full h-full"
           style={{
-            backgroundImage: `url(${
-              !pokemon.imageError ? pokemon.image : ball
-            })`,
+            backgroundImage: `url(${pokemon.image})`,
             ...cardStyle,
           }}
         />
 
         <img
-          src={!pokemon.imageError ? pokemon.image : ball}
+          src={pokemon.image}
           alt={`Image of ${pokemon.name}`}
           className={`mx-auto w-28 h-28 relative z-10`}
+          loading="lazy"
         />
       </div>
       <div className="p-4 bg-secondary h-full">
@@ -49,7 +47,7 @@ const PokemonCard = ({ pokemon }: Props) => {
                   "bg-sky-500 text-white": type === "water",
                   "bg-green-600 text-white": type === "bug",
                   "bg-yellow-600 text-white": type === "flying",
-                  "bg-slate-400 text-white": type === "normal",
+                  "bg-slate-400 text-black": type === "normal",
                   "bg-indigo-500 text-white": type === "psychic",
                   "bg-pink-500 text-white": type === "fairy",
                   "bg-amber-800 text-black": type === "ground",

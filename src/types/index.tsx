@@ -4,9 +4,8 @@ export interface PokemonType {
 export interface Pokemon {
   id: number;
   name: string;
-  image: string;
+  image?: string;
   types: string[];
-  imageError?: boolean;
 }
 
 export interface PokemonTypeApiResponse {
