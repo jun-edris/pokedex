@@ -96,7 +96,9 @@ const pokemonAPI = {
     const response = await axios.get<ApiResponse>(url);
 
     const filteredResponse =
-      selectedType !== "all" ? response.data.pokemon : response.data.results;
+      selectedType !== "all"
+        ? response.data.pokemon.slice(0, limit)
+        : response.data.results;
 
     const pokemonList = await Promise.all(
       filteredResponse.map(async (result: any) => {

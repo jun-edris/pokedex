@@ -15,6 +15,7 @@ const App = (): JSX.Element => {
   const [limit, setLimit] = useState<number>(18);
 
   const handleTypeChange = (type: string) => {
+    setLimit(18);
     setSelectedType(type);
   };
 
@@ -122,21 +123,18 @@ const App = (): JSX.Element => {
                         </div>
                       ))}
                 </div>
-                {!searchPokemon &&
-                  selectedType === "all" &&
-                  initialData &&
-                  initialData.length >= limit && (
-                    <div className="w-full flex justify-center mt-10">
-                      <button
-                        className="px-10 py-3 bg-secondary rounded-md hover:bg-tertiary hover:text-white transition duration-300 ease-in-out"
-                        onClick={() => {
-                          setLimit((prevLimit) => prevLimit + 8);
-                        }}
-                      >
-                        Show More
-                      </button>
-                    </div>
-                  )}
+                {!searchPokemon && (
+                  <div className="w-full flex justify-center mt-10">
+                    <button
+                      className="px-10 py-3 bg-secondary rounded-md hover:bg-tertiary hover:text-white transition duration-300 ease-in-out"
+                      onClick={() => {
+                        setLimit((prevLimit) => prevLimit + 12);
+                      }}
+                    >
+                      Show More
+                    </button>
+                  </div>
+                )}
               </>
             )}
           </div>
