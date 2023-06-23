@@ -11,7 +11,7 @@ interface Props {
 
 const TypeFilter: React.FC<Props> = ({ selectedType, onTypeChange }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLUListElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const { data: pokemonTypes = [], isLoading } = useQuery<PokemonType[]>(
     "pokemonTypes",
@@ -58,16 +58,16 @@ const TypeFilter: React.FC<Props> = ({ selectedType, onTypeChange }) => {
         onClick={handleInputClick}
       />
       {isOpen && (
-        <ul
+        <div
           ref={dropdownRef}
-          className="absolute z-50 w-full mt-1 bg-white rounded-md top-12 left-0 shadow-lg"
+          className="absolute z-50 w-full mt-1 bg-white top-12 left-0 shadow-lg"
         >
           {isLoading ? (
             <li>Loading...</li>
           ) : (
-            <>
+            <ul className="h-[300px] overflow-y-auto">
               <li
-                className="cursor-pointer py-2 px-3 text-sm hover:bg-quaternary first:hover:rounded-t-md last:hover:rounded-b-md border-b last:border-b-0 hover:text-white flex items-center capitalize"
+                className="cursor-pointer py-2 px-3 text-sm hover:bg-quaternary border-b last:border-b-0 hover:text-white flex items-center capitalize"
                 onClick={() => handleTypeClick("all")}
               >
                 all
@@ -75,20 +75,15 @@ const TypeFilter: React.FC<Props> = ({ selectedType, onTypeChange }) => {
               {pokemonTypes.map((type) => (
                 <li
                   key={type.name}
-                  className="cursor-pointer py-2 px-3 text-sm hover:bg-quaternary first:hover:rounded-t-md last:hover:rounded-b-md border-b last:border-b-0 hover:text-white flex items-center capitalize"
+                  className="cursor-pointer py-2 px-3 text-sm hover:bg-quaternary border-b last:border-b-0 hover:text-white flex items-center capitalize"
                   onClick={() => handleTypeClick(type.name)}
                 >
-                  {/* <img
-                src={`https://img.pokemondb.net/sprites/bank/normal/${option.name}.png`}
-                alt={type.name}
-                className="h-6 w-6 mr-2"
-              /> */}
                   {type.name}
                 </li>
               ))}
-            </>
+            </ul>
           )}
-        </ul>
+        </div>
       )}
     </div>
   );

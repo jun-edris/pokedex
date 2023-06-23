@@ -37,7 +37,11 @@ const App = (): JSX.Element => {
     Pokemon[]
   >(
     ["filteredPokemons", searchPokemon],
-    async () => pokemonAPI.filteredPokemons(searchPokemon),
+    async () => {
+      const filteredPokemon = pokemonAPI.filteredPokemons(searchPokemon);
+      setSelectedType("all");
+      return filteredPokemon;
+    },
     { enabled: !!searchPokemon }
   );
 
@@ -48,6 +52,9 @@ const App = (): JSX.Element => {
     async () => pokemonAPI.filteredPokemonsByType(limit, selectedType),
     { enabled: !!selectedType }
   );
+
+  const loading = initialLoading || filteredLoading || filteredTypeLoading;
+  const noData = filteredData?.length === 0 || filteredByType?.length === 0;
 
   return (
     <>
@@ -88,10 +95,13 @@ const App = (): JSX.Element => {
             </div>
           </div>
           <div className="w-full min-h-full">
-            {(initialLoading || filteredLoading || filteredTypeLoading) && (
-              <BouncingBall />
+            {loading && <BouncingBall />}
+            {noData && (
+              <div className="text-white text-center pt-25">
+                <p>No Data Found! Please Try Again Later...</p>
+              </div>
             )}
-            {(!initialLoading || !filteredLoading || !filteredTypeLoading) && (
+            {!loading && (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 mt-4">
                   {searchPokemon

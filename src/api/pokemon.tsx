@@ -66,21 +66,18 @@ const pokemonAPI = {
           }>(`https://pokeapi.co/api/v2/pokemon/${result.name}`);
 
           let imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonResponse.data.id}.png`;
-          let imgErr = false;
 
-          try {
-            await axios.get(imageUrl);
-          } catch (error) {
-            // if image is not found, use the ball image
-            imgErr = true;
-          }
+          const imgResponse = await axios.get(imageUrl).catch(() => {
+            return false;
+          });
+
+          const noImg = imgResponse ? imageUrl : ball;
 
           return {
             id: pokemonResponse.data.id,
             name: result.name,
-            image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonResponse.data.id}.png`,
+            image: noImg,
             types: pokemonResponse.data.types.map((type) => type.type.name),
-            imageError: imgErr,
           };
         })
     );
@@ -111,14 +108,18 @@ const pokemonAPI = {
           types: { type: { name: string } }[];
         }>(`https://pokeapi.co/api/v2/pokemon/${filteredResult}`);
 
-        let imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonResponse.data.id}.png`;
+        const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonResponse.data.id}.png`;
 
-        const pokeImg = imageUrl ? imageUrl : ball;
+        const imgResponse = await axios.get(imageUrl).catch(() => {
+          return false;
+        });
+
+        const noImg = imgResponse ? imageUrl : ball;
 
         return {
           id: pokemonResponse.data.id,
           name: filteredResult,
-          image: pokeImg,
+          image: noImg,
           types: pokemonResponse.data.types.map((type) => type.type.name),
         };
       })

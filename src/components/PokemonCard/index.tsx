@@ -27,8 +27,10 @@ const PokemonCard = ({ pokemon }: Props) => {
 
         <img
           src={pokemon.image}
-          alt={`Image of ${pokemon.name}`}
-          className={`mx-auto w-28 h-28 relative z-10`}
+          alt={`${pokemon.name}`}
+          className={`mx-auto ${
+            pokemon.image === "/ball.png" ? "w-14 h-14 m-7" : "w-28 h-28"
+          } relative z-10`}
           loading="lazy"
         />
       </div>
