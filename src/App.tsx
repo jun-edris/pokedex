@@ -12,7 +12,6 @@ import PokemonCard from "./components/PokemonCard";
 const App = (): JSX.Element => {
   const [searchPokemon, setSearchPokemon] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string>("all");
-  const [pokemons, setPokemons] = useState<Pokemon[] | undefined>([]);
   const [limit, setLimit] = useState<number>(12);
 
   const handleTypeChange = (type: string) => {
@@ -63,9 +62,6 @@ const App = (): JSX.Element => {
       enabled: !!selectedType,
       cacheTime: 1000 * 60 * 30, // 30 minutes
       keepPreviousData: true,
-      onSuccess: (data) => {
-        setPokemons((prev: any) => [...prev, ...data]);
-      },
     }
   );
 
