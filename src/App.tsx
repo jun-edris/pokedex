@@ -12,7 +12,8 @@ import PokemonCard from "./components/PokemonCard";
 const App = (): JSX.Element => {
   const [searchPokemon, setSearchPokemon] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string>("all");
-  const [limit, setLimit] = useState<number>(8);
+  // const [filteredPokemon, setFilteredPokemon] = useState<string>("");
+  const [limit, setLimit] = useState<number>(18);
 
   // const handleSearch = (e: any) => {
   //   setSearchPokemon(e.target.value);
@@ -27,16 +28,34 @@ const App = (): JSX.Element => {
     setSearchPokemon("");
   };
 
-  const {
-    data: pokemons,
-    isLoading,
-    isFetching,
-  } = useQuery<Pokemon[]>(
-    ["pokemons", limit],
-    () => pokemonAPI.getPokemons(limit),
-    { keepPreviousData: true }
+  const { data: initialData, isLoading: initialLoading } = useQuery<Pokemon[]>(
+    ["initialPokemons", limit],
+    async () => pokemonAPI.getPokemons(limit),
+    {
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      cacheTime: 1000 * 60 * 30, // 30 minutes
+      keepPreviousData: true,
+    }
   );
 
+  const { data: filteredData, isLoading: filteredLoading } = useQuery<
+    Pokemon[]
+  >(
+    ["filteredPokemons", searchPokemon],
+    async () => pokemonAPI.filteredPokemons(searchPokemon),
+    { enabled: !!searchPokemon }
+  );
+
+  const { data: filteredByType, isLoading: filteredTypeLoading } = useQuery<
+    Pokemon[]
+  >(
+    ["filteredPokemonsByType", limit, selectedType],
+    async () => pokemonAPI.filteredPokemonsByType(limit, selectedType),
+    { enabled: !!selectedType }
+  );
+
+  console.log(filteredByType);
   return (
     <>
       <div className="bg-primary h-full pb-10 min-h-screen">
@@ -60,9 +79,7 @@ const App = (): JSX.Element => {
                     type="text"
                     name="searchPokemon"
                     value={searchPokemon}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      setSearchPokemon(e.target.value);
-                    }}
+                    onChange={(e) => setSearchPokemon(e.target.value)}
                     placeholder="Enter Name of Pokemon"
                     className="bg-transparent outline-none text-white text-sm py-1 transition duration-300 ease-in-out lg:w-[250px]"
                   />
@@ -78,30 +95,36 @@ const App = (): JSX.Element => {
             </div>
           </div>
           <div className="w-full min-h-full">
-            {isLoading ? (
-              <BouncingBall />
-            ) : (
+            {(initialLoading || filteredLoading) && <BouncingBall />}
+            {(!initialLoading || !filteredLoading) && (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-                  {pokemons?.map((pokemon) => (
-                    <div key={pokemon.id}>
-                      <PokemonCard pokemon={pokemon} />
-                    </div>
-                  ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-4">
+                  {searchPokemon
+                    ? filteredData?.map((pokemon) => (
+                        <div key={pokemon.name}>
+                          <PokemonCard pokemon={pokemon} />
+                        </div>
+                      ))
+                    : initialData?.map((pokemon) => (
+                        <div key={pokemon.name}>
+                          <PokemonCard pokemon={pokemon} />
+                        </div>
+                      ))}
                 </div>
-                {isFetching && <BouncingBall />}
-                {pokemons && pokemons.length >= limit && (
-                  <div className="w-full flex justify-center mt-10">
-                    <button
-                      className="px-10 py-3 bg-secondary rounded-md hover:bg-tertiary hover:text-white transition duration-300 ease-in-out"
-                      onClick={() => {
-                        setLimit((prevLimit) => prevLimit + 8);
-                      }}
-                    >
-                      Show More
-                    </button>
-                  </div>
-                )}
+                {!searchPokemon &&
+                  initialData &&
+                  initialData.length >= limit && (
+                    <div className="w-full flex justify-center mt-10">
+                      <button
+                        className="px-10 py-3 bg-secondary rounded-md hover:bg-tertiary hover:text-white transition duration-300 ease-in-out"
+                        onClick={() => {
+                          setLimit((prevLimit) => prevLimit + 8);
+                        }}
+                      >
+                        Show More
+                      </button>
+                    </div>
+                  )}
               </>
             )}
           </div>

@@ -6,4 +6,9 @@ export interface Pokemon {
   name: string;
   image: string;
   types: string[];
+  imageError?: boolean;
+}
+
+export interface PokemonTypeApiResponse {
+  pokemon: { pokemon: { name: string; url: string } }[];
 }
