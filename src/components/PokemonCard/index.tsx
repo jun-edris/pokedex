@@ -18,30 +18,31 @@ const PokemonCard = ({ pokemon }: Props) => {
     <div className="rounded-md shadow-md overflow-hidden hover:shadow-lg transition duration-300 ease-in-out hover:scale-105 h-full">
       <div className="p-4 relative">
         <div
-          className="absolute left-0 top-0 w-full h-full"
+          className="absolute left-0 top-0 w-full h-full transition-opacity duration-500 animate-fade-in"
           style={{
             backgroundImage: `url(${pokemon.image})`,
             ...cardStyle,
           }}
         />
-
         <img
           src={pokemon.image}
           alt={`${pokemon.name}`}
           className={`mx-auto ${
             pokemon.image === "/ball.png" ? "w-14 h-14 m-7" : "w-28 h-28"
-          } relative z-10`}
+          } relative z-10 transition-opacity duration-500 animate-fade-in`}
           loading="lazy"
         />
       </div>
       <div className="p-4 bg-secondary h-full">
-        <h2 className="text-sm font-heading capitalize">{pokemon.name}</h2>
+        <h2 className="text-sm font-heading capitalize transition-opacity duration-500">
+          {pokemon.name}
+        </h2>
         <div className="mt-3">
           {pokemon.types.map((type) => (
             <span
               key={type}
               className={classNames(
-                "text-xs px-2 py-1 rounded-md mr-2 bg-gray-200",
+                "text-xs px-2 py-1 rounded-md mr-2 bg-gray-200 transition-opacity duration-500",
                 {
                   "bg-lime-400": type === "grass",
                   "bg-violet-500 text-white": type === "poison",

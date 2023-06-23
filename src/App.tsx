@@ -121,19 +121,32 @@ const App = (): JSX.Element => {
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 mt-4">
                   {searchPokemon
-                    ? filteredData?.map((pokemon) => (
-                        <div key={pokemon.id}>
+                    ? filteredData?.map((pokemon, index) => (
+                        <div
+                          key={pokemon.id}
+                          className={`transition-opacity duration-[500] delay-[${
+                            index + 2
+                          }00ms] animate-fade-in`}
+                        >
                           <PokemonCard pokemon={pokemon} />
                         </div>
                       ))
                     : selectedType !== "all"
-                    ? filteredByType?.map((pokemon) => (
-                        <div key={pokemon.id}>
+                    ? filteredByType?.map((pokemon, index) => (
+                        <div
+                          key={pokemon.id}
+                          className={`transition-opacity duration-[500] delay-[${index}0s] animate-fade`}
+                        >
                           <PokemonCard pokemon={pokemon} />
                         </div>
                       ))
-                    : initialData?.map((pokemon) => (
-                        <div key={pokemon.id}>
+                    : initialData?.map((pokemon, index) => (
+                        <div
+                          key={pokemon.id}
+                          className={`transition-opacity duration-[500] delay-[${
+                            index + 2
+                          }00s] animate-fade-in`}
+                        >
                           <PokemonCard pokemon={pokemon} />
                         </div>
                       ))}
