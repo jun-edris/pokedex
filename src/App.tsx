@@ -12,23 +12,28 @@ import PokemonCard from "./components/PokemonCard";
 const App = (): JSX.Element => {
   const [searchPokemon, setSearchPokemon] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string>("all");
-  const [limit, setLimit] = useState<number>(18);
+  const [pokemons, setPokemons] = useState<Pokemon[] | undefined>([]);
+  const [limit, setLimit] = useState<number>(12);
 
   const handleTypeChange = (type: string) => {
-    setLimit(18);
+    setLimit(12);
     setSelectedType(type);
+    clearInput();
   };
 
   const clearInput = () => {
     setSearchPokemon("");
   };
 
-  const { data: initialData, isLoading: initialLoading } = useQuery<Pokemon[]>(
+  const {
+    data: initialData,
+    isLoading: initialLoading,
+    isFetching: initialFetching,
+  } = useQuery<Pokemon[]>(
     ["initialPokemons", limit],
     async () => pokemonAPI.getPokemons(limit),
     {
-      refetchOnWindowFocus: false,
-      staleTime: 1000 * 60 * 5, // 5 minutes
+      staleTime: Infinity,
       cacheTime: 1000 * 60 * 30, // 30 minutes
       keepPreviousData: true,
     }
@@ -46,16 +51,31 @@ const App = (): JSX.Element => {
     { enabled: !!searchPokemon }
   );
 
-  const { data: filteredByType, isLoading: filteredTypeLoading } = useQuery<
-    Pokemon[]
-  >(
+  const {
+    data: filteredByType,
+    isLoading: filteredTypeLoading,
+    isFetching: filteredTypeFetching,
+  } = useQuery<Pokemon[]>(
     ["filteredPokemonsByType", limit, selectedType],
     async () => pokemonAPI.filteredPokemonsByType(limit, selectedType),
-    { enabled: !!selectedType }
+    {
+      staleTime: Infinity,
+      enabled: !!selectedType,
+      cacheTime: 1000 * 60 * 30, // 30 minutes
+      keepPreviousData: true,
+      onSuccess: (data) => {
+        setPokemons((prev: any) => [...prev, ...data]);
+      },
+    }
   );
 
   const loading = initialLoading || filteredLoading || filteredTypeLoading;
+  const fetching = initialFetching || filteredTypeFetching;
   const noData = filteredData?.length === 0 || filteredByType?.length === 0;
+
+  const loadMorePokemons = () => {
+    setLimit((prev) => prev + 6);
+  };
 
   return (
     <>
@@ -96,7 +116,6 @@ const App = (): JSX.Element => {
             </div>
           </div>
           <div className="w-full min-h-full">
-            {loading && <BouncingBall />}
             {noData && (
               <div className="text-white text-center pt-25">
                 <p>No Data Found! Please Try Again Later...</p>
@@ -123,12 +142,13 @@ const App = (): JSX.Element => {
                         </div>
                       ))}
                 </div>
+                {fetching && <BouncingBall />}
                 {!searchPokemon && (
                   <div className="w-full flex justify-center mt-10">
                     <button
                       className="px-10 py-3 bg-secondary rounded-md hover:bg-tertiary hover:text-white transition duration-300 ease-in-out"
                       onClick={() => {
-                        setLimit((prevLimit) => prevLimit + 12);
+                        loadMorePokemons();
                       }}
                     >
                       Show More

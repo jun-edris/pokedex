@@ -28,21 +28,17 @@ const pokemonAPI = {
         }>(`https://pokeapi.co/api/v2/pokemon/${result.name}`);
 
         let imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonResponse.data.id}.png`;
-        let imgErr = false;
+        const imgResponse = await axios.get(imageUrl).catch(() => {
+          return false;
+        });
 
-        try {
-          await axios.get(imageUrl);
-        } catch (error) {
-          // if image is not found, use the ball image
-          imgErr = true;
-        }
+        const noImg = imgResponse ? imageUrl : ball;
 
         return {
           id: pokemonResponse.data.id,
           name: result.name,
-          image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonResponse.data.id}.png`,
+          image: noImg,
           types: pokemonResponse.data.types.map((type) => type.type.name),
-          imageError: imgErr,
         };
       })
     );

@@ -6,7 +6,7 @@ const BouncingBall = () => {
   const ballRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="w-full flex flex-col items-center justify-center">
+    <div className="w-full flex flex-col items-center justify-center mb-24">
       <div id="ground" className="h-12">
         <div
           className={`relative w-12 h-12 rounded-full bg-center bg-cover ball`}
