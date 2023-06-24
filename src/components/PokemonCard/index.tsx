@@ -39,12 +39,12 @@ const PokemonCard = ({ pokemon }: Props) => {
         <h2 className="text-sm font-heading capitalize transition-opacity duration-500 text-zinc-800">
           {pokemon.name}
         </h2>
-        <div className="mt-3">
+        <div className="mt-3 flex gap-2 flex-wrap">
           {pokemon.types.map((type) => (
             <span
               key={type}
               className={classNames(
-                "px-3 py-2 rounded-md mr-2 font-heading font-light text-xs bg-gray-200 transition-opacity duration-500",
+                "px-3 py-2 rounded-md font-heading font-light text-xs bg-gray-200 transition-opacity duration-500 ",
                 {
                   "bg-lime-400": type === "grass",
                   "bg-violet-700 text-white": type === "poison",

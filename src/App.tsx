@@ -24,20 +24,6 @@ const App = (): JSX.Element => {
     setSearchPokemon("");
   };
 
-  const {
-    data: initialData,
-    isLoading: initialLoading,
-    isFetching: initialFetching,
-  } = useQuery<Pokemon[]>(
-    ["initialPokemons", limit],
-    async () => pokemonAPI.getPokemons(limit),
-    {
-      staleTime: Infinity,
-      cacheTime: 1000 * 60 * 30, // 30 minutes
-      keepPreviousData: true,
-    }
-  );
-
   const { data: filteredData, isLoading: filteredLoading } = useQuery<
     Pokemon[]
   >(
@@ -64,10 +50,6 @@ const App = (): JSX.Element => {
       keepPreviousData: true,
     }
   );
-
-  const loading = initialLoading || filteredLoading || filteredTypeLoading;
-  const fetching = initialFetching || filteredTypeFetching;
-  const noData = filteredData?.length === 0 || filteredByType?.length === 0;
 
   const loadMorePokemons = () => {
     setLimit((prev) => prev + 6);
@@ -117,15 +99,16 @@ const App = (): JSX.Element => {
             </div>
           </div>
           <div className="w-full min-h-full">
-            {loading && <BouncingBall />}
-            {noData && (
-              <div className="text-white text-center h-[500px] flex flex-col justify-center items-center">
-                <p className="block text-red-400 font-heading text-3xl font-semibold">
-                  Sorry no pokemon found!
-                </p>
-              </div>
-            )}
-            {!loading && (
+            {filteredLoading || (filteredTypeLoading && <BouncingBall />)}
+            {filteredData?.length === 0 ||
+              (filteredByType?.length === 0 && (
+                <div className="text-white text-center h-[500px] flex flex-col justify-center items-center">
+                  <p className="block text-red-400 font-heading text-3xl font-semibold">
+                    Sorry no pokemon found!
+                  </p>
+                </div>
+              ))}
+            {(!filteredLoading || !filteredTypeLoading) && (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 mt-4">
                   {searchPokemon
@@ -139,16 +122,7 @@ const App = (): JSX.Element => {
                           <PokemonCard pokemon={pokemon} />
                         </div>
                       ))
-                    : selectedType !== "all"
-                    ? filteredByType?.map((pokemon, index) => (
-                        <div
-                          key={pokemon.id}
-                          className={`transition-opacity duration-[500] delay-[${index}0s] animate-fade`}
-                        >
-                          <PokemonCard pokemon={pokemon} />
-                        </div>
-                      ))
-                    : initialData?.map((pokemon, index) => (
+                    : filteredByType?.map((pokemon, index) => (
                         <div
                           key={pokemon.id}
                           className={`transition-opacity duration-[500] delay-[${
@@ -159,7 +133,7 @@ const App = (): JSX.Element => {
                         </div>
                       ))}
                 </div>
-                {fetching && <BouncingBall />}
+                {filteredTypeFetching && <BouncingBall />}
                 {!searchPokemon && (
                   <div className="w-full flex justify-center mt-10">
                     <button
