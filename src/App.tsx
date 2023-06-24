@@ -80,7 +80,7 @@ const App = (): JSX.Element => {
           <div className="flex flex-col lg:flex-row md:justify-between items-center border-b border-zinc-100 pt-2 pb-6 lg:pb-2">
             <img src={logo} alt="Pokemon Logo" height="100%" width="200" />
             <div className="flex flex-col md:flex-row gap-3">
-              <span className="text-white font-sans h-full block my-auto">
+              <span className="text-white font-heading h-full block my-auto text-xs">
                 Filters
               </span>
               <div className="border border-solid rounded-full px-5 py-2 flex items-center relative">
@@ -92,13 +92,18 @@ const App = (): JSX.Element => {
               <div className="border border-solid rounded-full px-3 py-2">
                 <div className="flex gap-2 items-center">
                   <FiSearch size={18} className="text-white" />
+                  <label htmlFor="searchPokemon" className="hidden">
+                    Search Pokemon
+                  </label>
                   <input
+                    aria-labelledby="searchPokemon"
+                    id="searchPokemon"
                     type="text"
                     name="searchPokemon"
                     value={searchPokemon}
                     onChange={(e) => setSearchPokemon(e.target.value)}
                     placeholder="Enter Name of Pokemon"
-                    className="bg-transparent outline-none text-white text-sm py-1 transition duration-300 ease-in-out lg:w-[250px]"
+                    className="bg-transparent outline-none text-white font-heading text-xs py-1 transition duration-300 ease-in-out lg:w-[300px]"
                   />
                   {searchPokemon && (
                     <FiX
@@ -112,9 +117,12 @@ const App = (): JSX.Element => {
             </div>
           </div>
           <div className="w-full min-h-full">
+            {loading && <BouncingBall />}
             {noData && (
-              <div className="text-white text-center pt-25">
-                <p>No Data Found! Please Try Again Later...</p>
+              <div className="text-white text-center h-[500px] flex flex-col justify-center items-center">
+                <p className="block text-red-400 font-heading text-3xl font-semibold">
+                  Sorry no pokemon found!
+                </p>
               </div>
             )}
             {!loading && (

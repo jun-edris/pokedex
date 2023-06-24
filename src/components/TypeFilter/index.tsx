@@ -48,7 +48,7 @@ const TypeFilter: React.FC<Props> = ({ selectedType, onTypeChange }) => {
         type="text"
         value={selectedType}
         readOnly
-        className="bg-transparent outline-none text-white text-sm capitalize w-full"
+        className="bg-transparent outline-none text-white font-heading text-xs capitalize w-full"
         onClick={handleInputClick}
         placeholder={selectedType ? "" : "Select a type"}
       />
@@ -65,7 +65,7 @@ const TypeFilter: React.FC<Props> = ({ selectedType, onTypeChange }) => {
           {isLoading ? (
             <li>Loading...</li>
           ) : (
-            <ul className="h-[300px] overflow-y-auto">
+            <ul className="h-[300px] overflow-y-auto font-heading text-xs">
               <li
                 className="cursor-pointer py-2 px-3 text-sm hover:bg-quaternary border-b last:border-b-0 hover:text-white flex items-center capitalize"
                 onClick={() => handleTypeClick("all")}
