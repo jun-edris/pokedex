@@ -61,8 +61,8 @@ const App = (): JSX.Element => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row md:justify-between items-center border-b border-zinc-100 pt-2 pb-6 lg:pb-2">
             <img src={logo} alt="Pokemon Logo" height="100%" width="200" />
-            <div className="flex flex-col md:flex-row gap-3">
-              <span className="text-white font-heading h-full block my-auto text-xs">
+            <div className="flex flex-col lg:flex-row gap-3">
+              <span className="text-white text-center lg:text-left font-heading h-full block my-auto text-xs">
                 Filters
               </span>
               <div className="border border-solid rounded-full px-5 py-2 flex items-center relative">
