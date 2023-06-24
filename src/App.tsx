@@ -99,6 +99,7 @@ const App = (): JSX.Element => {
             </div>
           </div>
           <div className="w-full min-h-full">
+            {filteredLoading && <BouncingBall />}
             {(filteredData?.length === 0 || filteredByType?.length === 0) && (
               <div className="text-white text-center h-[500px] flex flex-col justify-center items-center">
                 <p className="block text-red-400 font-heading text-3xl font-semibold">
@@ -131,7 +132,7 @@ const App = (): JSX.Element => {
                         </div>
                       ))}
                 </div>
-                {!filteredLoading && filteredTypeFetching && <BouncingBall />}
+                {filteredTypeFetching && <BouncingBall />}
                 {!searchPokemon && (
                   <div className="w-full flex justify-center mt-10">
                     <button
