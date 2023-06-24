@@ -12,7 +12,7 @@ import PokemonCard from "./components/PokemonCard";
 const App = (): JSX.Element => {
   const [searchPokemon, setSearchPokemon] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string>("all");
-  const [limit, setLimit] = useState<number>(12);
+  const [limit, setLimit] = useState<number>(15);
 
   const handleTypeChange = (type: string) => {
     setLimit(12);
@@ -52,7 +52,7 @@ const App = (): JSX.Element => {
   );
 
   const loadMorePokemons = () => {
-    setLimit((prev) => prev + 6);
+    setLimit((prev) => prev + 5);
   };
 
   return (
@@ -99,15 +99,13 @@ const App = (): JSX.Element => {
             </div>
           </div>
           <div className="w-full min-h-full">
-            {(filteredLoading || filteredTypeLoading) && <BouncingBall />}
-            {filteredData?.length === 0 ||
-              (filteredByType?.length === 0 && (
-                <div className="text-white text-center h-[500px] flex flex-col justify-center items-center">
-                  <p className="block text-red-400 font-heading text-3xl font-semibold">
-                    Sorry no pokemon found!
-                  </p>
-                </div>
-              ))}
+            {(filteredData?.length === 0 || filteredByType?.length === 0) && (
+              <div className="text-white text-center h-[500px] flex flex-col justify-center items-center">
+                <p className="block text-red-400 font-heading text-3xl font-semibold">
+                  Sorry no pokemon found!
+                </p>
+              </div>
+            )}
             {(!filteredLoading || !filteredTypeLoading) && (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-4">
@@ -133,7 +131,7 @@ const App = (): JSX.Element => {
                         </div>
                       ))}
                 </div>
-                {filteredTypeFetching && <BouncingBall />}
+                {!filteredLoading && filteredTypeFetching && <BouncingBall />}
                 {!searchPokemon && (
                   <div className="w-full flex justify-center mt-10">
                     <button
