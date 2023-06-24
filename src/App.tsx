@@ -99,7 +99,7 @@ const App = (): JSX.Element => {
             </div>
           </div>
           <div className="w-full min-h-full">
-            {filteredLoading || (filteredTypeLoading && <BouncingBall />)}
+            {(filteredLoading || filteredTypeLoading) && <BouncingBall />}
             {filteredData?.length === 0 ||
               (filteredByType?.length === 0 && (
                 <div className="text-white text-center h-[500px] flex flex-col justify-center items-center">
