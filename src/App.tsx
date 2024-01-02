@@ -15,7 +15,7 @@ const App = (): JSX.Element => {
   const [limit, setLimit] = useState<number>(15);
 
   const handleTypeChange = (type: string) => {
-    setLimit(12);
+    setLimit(15);
     setSelectedType(type);
     clearInput();
   };
@@ -24,9 +24,11 @@ const App = (): JSX.Element => {
     setSearchPokemon("");
   };
 
-  const { data: filteredData, isLoading: filteredLoading } = useQuery<
-    Pokemon[]
-  >(
+  const {
+    data: filteredData,
+    isLoading: filteredLoading,
+    isFetching: filteredFetching,
+  } = useQuery<Pokemon[]>(
     ["filteredPokemons", searchPokemon],
     async () => {
       const filteredPokemon = pokemonAPI.filteredPokemons(searchPokemon);
@@ -99,15 +101,16 @@ const App = (): JSX.Element => {
             </div>
           </div>
           <div className="w-full min-h-full">
-            {filteredLoading && <BouncingBall />}
-            {(filteredData?.length === 0 || filteredByType?.length === 0) && (
-              <div className="text-white text-center h-[500px] flex flex-col justify-center items-center">
-                <p className="block text-red-400 font-heading text-3xl font-semibold">
-                  Sorry no pokemon found!
-                </p>
-              </div>
-            )}
-            {(!filteredLoading || !filteredTypeLoading) && (
+            {!filteredLoading &&
+              !filteredFetching &&
+              (filteredData?.length === 0 || filteredByType?.length === 0) && (
+                <div className="text-white text-center h-[500px] flex flex-col justify-center items-center">
+                  <p className="block text-red-400 font-heading text-3xl font-semibold">
+                    Sorry no pokemon found!
+                  </p>
+                </div>
+              )}
+            {!filteredLoading ? (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-4">
                   {searchPokemon
@@ -133,19 +136,26 @@ const App = (): JSX.Element => {
                       ))}
                 </div>
                 {filteredTypeFetching && <BouncingBall />}
-                {!searchPokemon && (
-                  <div className="w-full flex justify-center mt-10">
-                    <button
-                      className="px-10 py-3 bg-secondary rounded-md hover:bg-tertiary hover:text-white transition duration-300 ease-in-out"
-                      onClick={() => {
-                        loadMorePokemons();
-                      }}
-                    >
-                      Show More
-                    </button>
-                  </div>
-                )}
+
+                {!searchPokemon &&
+                  !filteredLoading &&
+                  !filteredFetching &&
+                  !filteredTypeLoading &&
+                  !filteredTypeFetching && (
+                    <div className="w-full flex justify-center mt-10">
+                      <button
+                        className="px-10 py-3 bg-secondary rounded-md hover:bg-tertiary hover:text-white transition duration-300 ease-in-out"
+                        onClick={() => {
+                          loadMorePokemons();
+                        }}
+                      >
+                        Show More
+                      </button>
+                    </div>
+                  )}
               </>
+            ) : (
+              <BouncingBall />
             )}
           </div>
         </div>
