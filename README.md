@@ -24,18 +24,16 @@ This project was bootstrapped with [Vite](https://vitejs.dev/) typescript.
    yarn install
    ```
 
-3. Create an `.env` file and paste your token from Open Weather.
+3. Create an `.env` file and paste your token from PokeAPI.
 4. Start the development server
 
    ```
-   yarn start
+   yarn dev
    ```
 
 ## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+You can learn more in the [Vite React](https://vitejs.dev/).
 
 ## License
 
